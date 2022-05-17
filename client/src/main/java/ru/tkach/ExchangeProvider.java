@@ -27,7 +27,12 @@ public class ExchangeProvider {
                 .queryParam("name", name)
                 .queryParam("amount", amount)
                 .build().toUriString();
-        return Integer.parseInt(UrlUtils.sendThenReceive(url));
+        String response = UrlUtils.sendThenReceive(url);
+        try {
+            return Integer.parseInt(response);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException(response);
+        }
     }
 
     public int sellStock(String name, int amount) {

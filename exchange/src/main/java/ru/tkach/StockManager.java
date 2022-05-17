@@ -12,7 +12,7 @@ public class StockManager {
 
     public void checkStock(String name) {
         if (!stocks.containsKey(name)) {
-            throw new RuntimeException("No such stock: " + name);
+            throw new RuntimeException("Stock with name " + name + " doesn't exist");
         }
     }
 

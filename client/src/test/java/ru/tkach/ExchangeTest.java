@@ -70,6 +70,10 @@ public class ExchangeTest {
         return sendThenReceive(EXCHANGE_PORT, "set_price", "name=" + stockName + "&price=" + price);
     }
 
+    private String getAmount(String stockName) {
+        return sendThenReceive(EXCHANGE_PORT, "get_amount", "name=" + stockName);
+    }
+
     private String getInfo(int userId) {
         return sendThenReceive(CLIENT_PORT, "info", "userId=" + userId);
     }
@@ -78,7 +82,51 @@ public class ExchangeTest {
     public void test() {
         String response;
 
-        response = addStock("A", 10, 100);
-        assertEquals("Stock A was successfully added", response);
+        response = addStock("XXX", 10, 100);
+        assertEquals("Stock XXX was successfully added", response);
+        response = addStock("XXX", 10, 100);
+        assertEquals("Stock with this name already exists", response);
+        response = addStock("YYY", 20, 100);
+        assertEquals("Stock YYY was successfully added", response);
+
+        response = getPrice("XXX");
+        assertEquals("100", response);
+        response = setPrice("YYY", 50);
+        assertEquals("Price successfully changed", response);
+        response = getAmount("XXX");
+        assertEquals("10", response);
+
+        response = addUser(1);
+        assertEquals("User was successfully added", response);
+        response = addUser(1);
+        assertEquals("User with id 1 already exists", response);
+        response = addUser(2);
+        assertEquals("User was successfully added", response);
+
+        response = deposit(1, 500);
+        assertEquals("Deposit complete", response);
+        response = buy(1, "XXX", 5);
+        assertEquals("Purchase complete", response);
+        response = sell(1, "XXX", 3);
+        assertEquals("Sale complete", response);
+
+        buy(1, "YYY", 3);
+        response = total(1);
+        assertEquals("500", response);
+        response = getInfo(1);
+        assertEquals("YYY: amount=3, price=50XXX: amount=2, price=100", response);
+
+        response = getInfo(10);
+        assertEquals("User with id 10 doesn't exist", response);
+        response = getPrice("ZZZ");
+        assertEquals("Stock with name ZZZ doesn't exist", response);
+
+        response = buy(1, "XXX", 5);
+        assertEquals("User's balance is not enough", response);
+        response = sell(1, "XXX", 5);
+        assertEquals("User doesn't have enough stocks", response);
+        deposit(1, 10000);
+        response = buy(1, "XXX", 20);
+        assertEquals("Not enough stock to buy: XXX", response);
     }
 }

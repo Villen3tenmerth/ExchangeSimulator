@@ -31,7 +31,7 @@ public class UserController {
     public String deposit(@RequestParam int userId, @RequestParam int amount) {
         return getStringOrError(() -> {
             userManager.addToUserBalance(userId, amount);
-            return "Deposit completed";
+            return "Deposit complete";
         });
     }
 
@@ -39,7 +39,7 @@ public class UserController {
     public String buy(@RequestParam int userId, @RequestParam String stockName, @RequestParam int amount) {
         return getStringOrError(() -> {
             userManager.buyStock(userId, stockName, amount);
-            return "Purchase completed";
+            return "Purchase complete";
         });
     }
 
@@ -47,7 +47,7 @@ public class UserController {
     public String sell(@RequestParam int userId, @RequestParam String stockName, @RequestParam int amount) {
         return getStringOrError(() -> {
             userManager.sellStock(userId, stockName, amount);
-            return "Sale completed";
+            return "Sale complete";
         });
     }
 
